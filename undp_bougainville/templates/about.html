@@ -1,0 +1,123 @@
+<!-- {% extends "geonode_base.html" %} -->
+
+{% load i18n %}
+{% load static %}
+
+{% block title %} {% trans "About" %} — {{ block.super }} {% endblock %}
+{% block body_class %}about{% endblock %}
+
+
+{% block body_outer %}
+<div class="about-header">
+  <div class="inner-header">
+    <h1 class="main-title">About the Bougainville Natural Resource Hub</h1>
+    <p class="subtitle">The islands of Bougainville and the adjacent Buka, together with several outlying small islands
+      and atolls, form the Autonomous Region of Bougainville, Papua New Guinea.
+  </div>
+</div>
+
+
+<div class="block-green">
+  <div class="container">
+    The islands are abundant in natural resources, with volcanic soil producing rich and high-value agricultural
+    products such as cocoa and vanilla, large swathes of primary and secondary forest, beche-de-mer, off-shore tuna
+    fisheries and minerals. Careful management to ensure the healthy and sustainable lives and livelihoods will require
+    the transformation of global level data into local level insights, and insights into actionable policy and
+    programming.
+  </div>
+</div>
+
+<div class="block-white">
+  <div class="container">
+
+    <h2>The Bougainville Natural Resource Hub</h2>
+    <p>
+      Following the results of the December 2019 independence referendum, the Autonomous Region of Bougainville faces a
+      wide array of critical sustainability challenges and strategic choices on its path to independence. The overall
+      aim of this web catalogue, developed and maintained by UNDP, is to provide technical infrastructure, spatial data
+      and analytics, framed in part by the Sustainable Development Goals and other strategic priorities, which can
+      provide information and opportunities to assist the Autonomous Government of Bougainville in taking sound natural
+      resource management decisions.
+    </p>
+  </div>
+</div>
+
+<div class="block-graphics">
+  <div class="container">
+    <h2>The Bougainville Natural Resource Hub is designed to be:</h2>
+    <div class="image-grid">
+
+      <div class="img-group">
+        <img src="{% static 'img/1_portal.png' %}" alt="">
+        <p>
+          1. <span class="upper">A Portal</span> for accessing information on Natural Resource Management (NRM)
+        </p>
+      </div>
+      <div>
+        <img src="{% static 'img/2_space.png' %}" alt="">
+        <p>
+          2. <span class="upper">A Space</span> where specialist organizations, academic institutions and ongoing
+          local projects can share data and updates
+        </p>
+      </div>
+      <div>
+        <img src="{% static 'img/3_support.png' %}" alt="">
+        <p>
+          3. <span class="upper">A Decision-support tool</span> for policy matters, civil society organizations and
+          other stakeholders who want to monitor NRM data, and turn commitment into action
+        </p>
+      </div>
+    </div>
+
+    <p class="green-text">
+      This web portal is based on the GeoNode open-source geospatial infrastructure. <br> The curriculum will be made
+      available for technical focal points to learn how to upload, use, and develop data on this website.
+    </p>
+  </div>
+</div>
+
+<div class="text-grid">
+  <div class="container">
+    <div class="grid">
+      <div class="text-group">
+        <h4> The Challenge</h4>
+        <p>
+          The digital revolution is innovating the way we can measure and understand the environment. All
+          environmental
+          problems happen somewhere, and understanding the where can help us understand the why and the how for
+          sustainable interventions. And now, through satellite imagery we have the ability to measure deforestation
+          to
+          the single tree; or record coral bleaching events in near real-time. Many of these datasets are free,
+          produced
+          by premier research institutions, and available for uptake into insights and planning, for example through
+          portals such as the <a href="https://unbiodiversitylab.org/">UN Biodiversity Lab</a>, <a
+            href="https://www.globalforestwatch.org/">Global Forest Watch</a>, and the <a
+            href="https://wesr.unep.org/">World Environment Situation Room</a>.
+        </p>
+      </div>
+      <div class="text-group">
+        <h4> The Opportunity</h4>
+        <p>
+          Despite this, gaps remain between data and policy. Whilst data exists, policymakers need easy access to
+          localized, actionable, and targeted analytics with which to take sound decisions, particularly in regards to
+          natural resources. Through the aggregation of global, high-quality datasets with locally created data and
+          insights, natural resource governance processes can become more transparent for all stakeholders by ensuring
+          everyone has access to the same set of information. Spatial data represents a particularly engaging format
+          of
+          using data for decision-making, as maps have the ability to transcend language and cultural barriers.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="questions-block">
+  <div class="container">
+    <h3>Have questions?</h3>
+    <p>This web portal has been developed and is currently being maintained with the support of UNDP.</p>
+    <p>Contact us at <a href="mailto:png.im@undp.org ">png.im@undp.org </a></p>
+  </div>
+</div>
+
+
+{% endblock %}

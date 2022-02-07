@@ -1,0 +1,81 @@
+version: '2.2'
+services:
+  mailserver:
+    image: docker.io/mailserver/docker-mailserver:latest
+    container_name: mailserver4${COMPOSE_PROJECT_NAME}
+    hostname: mail
+    # Change this to your domain, it is used for your email accounts (eg: user@example.com):
+    domainname: bougainville-nr.org
+    ports:
+      - "25:25"
+      - "587:587"
+      - "465:465"
+    volumes:
+      - /mnt/efs/fs1/dms/mail-data/:/var/mail/
+      - /mnt/efs/fs1/dms/mail-state/:/var/mail-state/
+      - /mnt/efs/fs1/dms/mail-logs/:/var/log/mail/
+      - /mnt/efs/fs1/dms/config/:/tmp/docker-mailserver/
+      # The "from" path will vary based on where your certs are locally:
+      - nginx-certificates:/etc-letsencrypt/
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - ENABLE_FAIL2BAN=1
+      # Using letsencrypt for SSL/TLS certificates
+      - SSL_TYPE=manual
+        # Values should match the file paths inside the container:
+      - SSL_CERT_PATH=/etc-letsencrypt/production/live/bougainville-nr.org/fullchain.pem
+      - SSL_KEY_PATH=/etc-letsencrypt/production/live/bougainville-nr.org/privkey.pem
+      # Allow sending emails from other docker containers
+      # Beware creating an Open Relay: https://docker-mailserver.github.io/docker-mailserver/edge/config/environment/#permit_docker
+      - PERMIT_DOCKER=network
+      # All env below are default settings:
+      - DMS_DEBUG=0
+      - ONE_DIR=1
+      - ENABLE_POSTGREY=0
+      - ENABLE_CLAMAV=0
+      - ENABLE_SPAMASSASSIN=0
+      # You may want to enable this: https://docker-mailserver.github.io/docker-mailserver/edge/config/environment/#spoof_protection
+      # See step 8 below, which demonstrates setup with enabled/disabled SPOOF_PROTECTION:
+      - SPOOF_PROTECTION=0
+    restart: always
+    stop_grace_period: 1m
+    cap_add:
+      - NET_ADMIN # For Fail2Ban to work
+      - SYS_PTRACE
+  db:
+    volumes:
+      - '/mnt/efs/fs1/dbdata:/var/lib/postgresql/data'
+      - '/mnt/efs/fs1/dbbackups:/pg_backups'
+  django:
+    build: .
+    # Loading the app is defined here to allow for
+    # autoreload on changes it is mounted on top of the
+    # old copy that docker added when creating the image
+    volumes:
+      - '.:/usr/src/undp_bougainville'
+      - '/mnt/efs/fs1/backup_restore:/backup_restore'  # Link to local volume in the HOST
+      - '/mnt/efs/fs1/data:/data'  # Link to local volume in the HOST
+#      - '/mnt/efs/fs1/statics:/mnt/volumes/statics'  # Link to local volume in the HOST
+#      - '/mnt/efs/fs1/geoserver_data:/geoserver_data/data'  # Link to local volume in the HOST
+  celery:
+    volumes:
+      - '/mnt/efs/fs1/backup_restore:/backup_restore'  # Link to local volume in the HOST
+#      - '/mnt/efs/fs1/statics:/mnt/volumes/statics'  # Link to local volume in the HOST
+#      - '/mnt/efs/fs1/geoserver_data/data:/geoserver_data/data'  # Link to local volume in the HOST
+      - '/mnt/efs/fs1/data:/data'  # Link to local volume in the HOST
+  geoserver:
+    volumes:
+      - '/mnt/efs/fs1/backup_restore:/backup_restore'  # Link to local volume in the HOST
+      - '/mnt/efs/fs1/geoserver_cache:/geoserver_cache'  # Link to local volume in the HOST
+#      - '/mnt/efs/fs1/statics:/mnt/volumes/statics'  # Link to local volume in the HOST
+      - '/mnt/efs/fs1/data:/data'  # Link to local volume in the HOST
+#  data-dir-conf:
+#    volumes:
+#      - '/mnt/efs/fs1/geoserver_data/data:/geoserver_data/data'  # Link to local volume in the HOST
+#  geonode:
+#    volumes:
+#      - '/mnt/efs/fs1/statics:/mnt/volumes/statics'  # Link to local volume in the HOST
+  jenkins:
+    volumes:
+      - '/mnt/efs/fs1/backup_restore:/backup_restore'  # Link to local volume in the HOST
+      - '/mnt/efs/fs1/data:/data'  # Link to local volume in the HOST

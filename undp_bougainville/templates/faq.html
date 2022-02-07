@@ -1,0 +1,47 @@
+{% extends "geonode_base.html" %}
+
+{% load i18n %}
+{% load static %}
+
+{% block title %} FAQs — {{ block.super }} {% endblock %}
+{% block body_class %}faqs{% endblock %}
+
+
+{% block body_outer %}
+<div class="page-header">
+  <h1>{% trans "FAQ Page" %}</h1>
+</div>
+  
+ <h2>What is the Natural Resource Hub for Bougainville for? </h2>
+ <p>
+    This Hub has been designed to provide, upload, and share geospatial data regarding natural resource management in the Autonomous Region of Bougainville. This includes data on coral reefs, mangroves, forests, and other critical ecosystems. Users can interact with maps and data regarding their work or residential area. 
+ </p>
+
+ <h2>Why isn’t this Hub for all of Papua New Guinea? </h2>
+ <p>
+    This hub is a provincial prototype for a national level implementation of the Natural Resource Hub for Papua New Guinea. The lessons learned will be integrated into the national Hub in 2022. 
+
+ </p>
+
+ <h2>Is all of the data public?</h2>
+ <p>
+    At the time of writing, all data in the Natural Resource Hub is from globally available, open datasets. These have been clipped and made more accessible for use by stakeholders in Bougainville. Whilst these datasets are public, data can be uploaded which is for certain users or private.  
+ </p>
+
+ <h2>How can I learn more about how to use the Hub? </h2>
+ <p>
+    We are developing training materials which will be available on this site in early 2022. 
+ </p>
+
+ <h2>Why do I need a user account?</h2>
+ <p>
+    Registering for a user account gives can unlock more functionalities such as uploading data, editing data, styling data, adding metadata, and joining a “user group. User groups may have special privileges or share private data to certain members. 
+ </p>
+
+ <h2>How can I make a user account?</h2>
+ <p>
+    To register for the Hub, please email im.png@undp.org.  
+ </p>
+ 
+
+{% endblock %}

@@ -1,0 +1,207 @@
+{% extends 'index.html' %}
+{% load markdownify %}
+{% load i18n %}
+{% load base_tags %}
+{% load static %}
+
+
+{% block title %} Bougainville Natural Resource Hub {% endblock %}
+
+
+{% block hero %}
+  <div class="jumbotron">
+    <div class="inner-jumbotron">
+      <p class="main-title">Bougainville Natural Resource Hub</p>
+      <p class="subtitle">Connecting you to environmental maps and data</p>
+    </div>
+  </div>
+{% endblock hero %}
+
+{% block mainbody %}
+
+<section id="about">
+  <div class="container text-center">
+    <h1>Welcome to the Bougainville Natural Resource Hub</h1>
+    <p class="about-intro-text">
+      This user-friendly, participatory, and open-access online web portal has been curated and developed by UNDP to support mapping and monitoring the environment and sustainable use of natural resources.
+    </p>
+    <hr style="width: 70%; border-top: 1px solid #0c0c0c; margin-top: 30px; margin-bottom: 30px; ">
+    <p>
+      This includes global datasets on coral reefs, mangroves, forests, and other critical ecosystems, along with
+      datasets which can assist in planning such as administrative boundaries and village locations. You can upload,
+      view, make and share data from many different levels (local to global) using the functionalities of the Hub.
+    </p>
+  </div>
+</section>
+
+  <section id="featured" class="featured">
+    <div ng-app="featured" ng-if="featured.length > 0" ng-cloak>
+      <div class="featured-stories-inner">
+        <div ng-if="featured | getTypeApps" class="container stories" >
+          <h2 class="text-center">{% trans "Featured Stories" %}</h2>
+          <div class="featured-group-wrapper">
+            {% verbatim %}
+            <div ng-repeat="item in featured" ng-if="item.detail_url.split('/',2)[1] === 'apps'" >
+              <h4>
+                {{ item.title | limitTo: 20 }}{{item.title.length > 20 ? '...' : ''}}
+              </h4>
+              <div class="image-group">
+                  <div class="featured-img-wrapper">
+                    <img ng-src="{{ item.thumbnail_url }}"/>
+                    <div class="item-overlay top">{{ item.abstract | filter | stripHtml | limitTo: 90 }}{{item.abstract.length > 90 ? '...' : ''}}</div>
+                  </div>
+                  <div class="button-wrapper">
+                    <a class="button" href="/apps/{{ item.id }}/view#">Read more</a>
+                  <div>
+              </div>
+              <div>
+              </div>
+            </div>
+            {% endverbatim %}
+          </div>
+        </div>
+      </div>
+
+      <div class="featured-data-inner">
+        <div ng-if="featured | getTypeAll" class="container data">
+          <h2 class="text-center">{% trans "Featured Data" %}</h2>
+          <div class="featured-group-wrapper">
+            {% verbatim %}
+            <div ng-repeat="item in featured" ng-if="item.detail_url.split('/',2)[1] !== 'apps'">
+              <h4>
+                {{ item.title | limitTo: 20 }}{{item.title.length > 20 ? '...' : ''}} 
+                <span class="data-type">({{ item.detail_url.split('/',2)[1].slice(0, -1) }})</span>
+              </h4>
+              <div class="image-group">
+                <a href="{{ item | getUrl }}">
+                  <div class="featured-img-wrapper">
+                    <img ng-src="{{ item.thumbnail_url }}"/>
+                    <div class="item-overlay top">{{ item.abstract | filter | stripHtml | limitTo: 90 }}{{item.abstract.length > 90 ? '...' : ''}}</div>
+                  </div>
+                </a>
+                <div class="button-wrapper">
+                  <a class="button" href="{{ item | getUrl }}">View</a>
+                </div>
+              </div>
+            </div>
+            {% endverbatim %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="services">
+    <div class="container">
+      <h2>Data and Services available on the Hub</h2>
+      <div class="services-wrapper">
+        <div>
+          <h4>Interactive data catalogue</h4>
+          <p>Spatial and non-spatial data which can be viewed in browser, or streamed into desktop GIS software.</p>
+        </div>
+        <div>
+          <h4>User accounts</h4>
+          <p>Registering for the platform allows individuals to create maps and be added to user groups which unlock functionalities such as uploading, editing, and sharing</p>
+        </div>
+        <div>
+          <h4>Data downloading</h4>
+          <p>Public datasets can be downloaded, streamed and integrated into existing platforms</p>
+        </div>
+        <div>
+          <h4>Reporting</h4>
+          <p>Users can create customized maps from layers from within the Hub which can be download and integrated directly into reports</p>
+        </div>
+        <div>
+          <h4>Interactive data products</h4>
+          <p>GeoStories integrate text, multimedia and data to reach a wide audience. Dashboards help monitoring progress and change over time.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {% block datasets %}
+    <section id="datasets">
+      {% get_visibile_resources request.user %}
+    </section>
+  {% endblock datasets %}
+
+  {% block bigsearch %}
+    <div class="big-search">
+      <div class="container">
+        <h3 style="text-align: center;">{% trans "Search the Hub" %}</h3>
+        <div class="search">
+          <form id="main_search" action="{% url "search" %}">
+            <span class="fa fa-search fa-3x" style="font-size: 2em;"></span>
+            {% if HAYSTACK_SEARCH %}
+              <input id="main_search_input" style="font-size: 1em;" type="text" placeholder="{% trans 'Search' %}"
+                     class="form-control" name="q" autocomplete="off">
+              <input type="hidden" name="abstract__icontains" id="main_search_abstract_input"
+                     placeholder="{% trans 'Search' %}">
+              <input type="hidden" name="purpose__icontains" id="main_search_purpose_input"
+                     placeholder="{% trans 'Search' %}">
+              <input type="hidden" name="f_method" id="main_filtering_type" value="or">
+            {% else %}
+              <input id="main_search_input" style="font-size: 1em;" type="text" placeholder="{% trans 'Search' %}"
+                     class="form-control" autocomplete="off" name="title__icontains">
+              <input type="hidden" name="abstract__icontains" id="main_search_abstract_input">
+              <input type="hidden" name="purpose__icontains" id="main_search_purpose_input">
+              <input type="hidden" name="f_method" id="main_filtering_type" value="or">
+            {% endif %}
+          </form>
+        </div>
+        <p><a style="font-size: 1em;" class="btn btn-default btn-lg"
+              href="{% url "search" %}">{% trans "Advanced Search" %}</a></p>
+      </div>
+    </div>
+  {% endblock bigsearch %}
+
+
+{% endblock mainbody %}
+
+{% block extra_script %}
+  {{ block.super }}
+  <script type="text/javascript">
+    'use strict';
+    FEATURED_URL = '{% url 'api_dispatch_list' api_name='api' resource_name='featured' %}';
+    (function () {
+      var module = angular.module('featured', [])
+      module.filter('getUrl', function () {
+        return function (input) {
+          if (input.detail_url.split('/',2)[1] === 'maps') {
+            return `${input.detail_url}/view#`
+          } else {
+            return input.detail_url
+          }
+        }
+      });
+      module.filter('getTypeApps', function () {
+        return function (input, type) {
+          return input.some(x => x.detail_url.split('/',2)[1] === 'apps')
+        }
+      });
+      module.filter('getTypeAll', function () {
+        return function (input, type) {
+          return input.some(x => x.detail_url.split('/',2)[1] !== 'apps')
+        }
+      });
+      module.filter('stripHtml', function () {
+        return function (input) {
+          const doc = new DOMParser().parseFromString(input, 'text/html');
+          return doc.body.textContent || '';
+        };
+      });
+      module.run(function ($http, $rootScope) {
+        $http.get(FEATURED_URL).then(successCallback, errorCallback);
+
+        function successCallback(data) {
+          //success code
+          $rootScope.featured = data.data.objects;
+        };
+
+        function errorCallback(error) {
+          //error code
+        };
+      });
+    })();
+  </script>
+{% endblock %}
