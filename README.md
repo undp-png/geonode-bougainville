@@ -1,6 +1,6 @@
-# Undp_Bougainville
+# Bougainville Natural Resources Hub
 
-GeoNode template project. Generates a django project with GeoNode support.
+A customised Geonode for creating an open-access online web portal to support mapping and monitoring of the environment and sustainable use of natural resources in Bougainville.
 
 ## Table of Contents
 

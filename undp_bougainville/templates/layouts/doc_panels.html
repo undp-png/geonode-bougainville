@@ -363,7 +363,7 @@ span.grippy::after {
                                     {% endblock doc_category %}
                                     {% block doc_group %}
                                     <div id="basicGroupInfo" class="col-lg-12">
-                                        <span><label for="id_resource-group" class="control-label required-field">{% trans "Group" %}</label></span>
+                                        <span><label for="id_resource-group" class="control-label required-field  has-external-popover" data-content="{{ document_form.group.help_text }}" data-placement="right" data-container="body" data-html="true">{% trans "Group" %}</label></span>
                                         <select
                                             title="{% trans "Choose one of the following..." %}"
                                             data-live-search="true"
@@ -443,20 +443,24 @@ span.grippy::after {
                                       </div>
                                     {% endblock doc_regions %}
                                     {% block doc_data_quality_statement %}
+                                      {% if document_form.data_quality_statement %}
                                       <div>
                                           <span><label for="{{ document_form.data_quality_statement|id }}">{{ document_form.data_quality_statement.label }}</label></span>
                                           <!--<p class="xxs-font-size">(General explanation of the data producer's knowledge about the lineage)</p>-->
                                           {{ document_form.data_quality_statement }}
                                       </div>
+                                      {% endif %}
                                     {% endblock doc_data_quality_statement %}
                                 </div>
                                 <div class="col-lg-4">
                                     {% block doc_restriction_code_type %}
+                                      {% if document_form.restriction_code_type %}
                                     <div>
                                         <span><label for="{{ document_form.restriction_code_type|id }}">{{ document_form.restriction_code_type.label }}</label></span>
                                         <!--<p class="xxs-font-size">(Limitation/s placed upon the access or use of data)</p>-->
                                         {{ document_form.restriction_code_type }}
                                     </div>
+                                      {% endif %}
                                     {% endblock doc_restriction_code_type %}
                                     {% block doc_constraints_other %}
                                     <div>
@@ -483,17 +487,21 @@ span.grippy::after {
             <div class="col-xs-12 col-lg-4">
               <p>{% trans "Other, Optional, Metadata" %}</p>
                {% block doc_edition %}
+                 {% if document_form.edition %}
                 <div>
                     <span><label for="{{ document_form.edition|id }}">{{ document_form.edition.label }}</label></span>
                     <!--<p class="xxs-font-size">(Version of the cited resource)</p>-->
                     {{ document_form.edition }}
                 </div>
+                 {% endif %}
                 {% endblock doc_edition %}
                 {% block doc_doi %}
+                  {% if document_form.doi %}
                 <div>
                     <span><label for="{{ document_form.doi|id }}">{{ document_form.doi.label }}</label></span>
                     {{ document_form.doi }}
                 </div>
+                  {% endif %}
                 {% endblock doc_doi %}
                 {% block doc_purpose %}
                 <div>
