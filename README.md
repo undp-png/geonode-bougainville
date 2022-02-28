@@ -2,11 +2,12 @@
 
 A customised Geonode for creating an open-access online web portal to support mapping and monitoring of the environment and sustainable use of natural resources in Bougainville.
 
+---
+![Landing Page](hero_landing_bougainville_demo.png)
+
 ## Table of Contents
 
-- [Developer Workshop](#developer-Workshop)
-- [Create a custom project](#create-a-custom-project)
-- [Start your server using Docker](#start-your-server-using-docker)
+- [Installation](#installation)
 - [Run the instance in development mode](#run-the-instance-in-development-mode)
 - [Run the instance on a public site](#run-the-instance-on-a-public-site)
 - [Stop the Docker Images](#stop-the-docker-images)
@@ -17,73 +18,8 @@ A customised Geonode for creating an open-access online web portal to support ma
 - [Mail Server Setup](#setting-up-a-mail-server)
 - [Custom Changes: Differences From Default Geonode](#project-customisations)
 
-## Developer Workshop
 
-Available at
-
-  ```bash
-    http://geonode.org/dev-workshop
-  ```
-
-## Create a custom project
-
-**NOTE**: *You can call your geonode project whatever you like **except 'geonode'**. Follow the naming conventions for python packages (generally lower case with underscores (``_``). In the examples below, replace ``undp_bougainville`` with whatever you would like to name your project.*
-
-### Using a Python virtual environment
-
-**NOTE**: *Skip this part if you want to run the project using Docker instead*
-
-(see [Start your server using Docker](#start-your-server-using-docker))
-
-To setup your project using a local python virtual environment, follow these instructions:
-
-1. Prepare the Environment
-
-    ```bash
-    git clone https://github.com/GeoNode/geonode-project.git -b <your_branch>
-    source /usr/share/virtualenvwrapper/virtualenvwrapper.sh
-    mkvirtualenv --python=/usr/bin/python3 undp_bougainville
-    pip install Django==2.2.12
-
-    django-admin startproject --template=./geonode-project -e py,sh,md,rst,json,yml,ini,env,sample,properties -n monitoring-cron -n Dockerfile undp_bougainville
-
-    cd undp_bougainville
-    ```
-
-2. Setup the Python Dependencies
-
-    **NOTE**: *Important: modify your `requirements.txt` file, by adding the `GeoNode` branch before continue!*
-
-    (see [Hints: Configuring `requirements.txt`](#hints-configuring-requirementstxt))
-
-    ```bash
-    pip install -r requirements.txt --upgrade
-    pip install -e . --upgrade
-
-    # Install GDAL Utilities for Python
-    pip install pygdal=="`gdal-config --version`.*"
-
-    # Dev scripts
-    mv .override_dev_env.sample .override_dev_env
-    mv manage_dev.sh.sample manage_dev.sh
-    mv paver_dev.sh.sample paver_dev.sh
-
-    # Using the Default Settings
-    ./paver_dev.sh reset
-    ./paver_dev.sh setup
-    ./paver_dev.sh sync
-    ./paver_dev.sh start
-    ```
-
-3. Access GeoNode from browser
-
-    **NOTE**: default admin user is ``admin`` (with pw: ``admin``)
-
-    ```bash
-    http://localhost:8000/
-    ```
-
-## Start your server using Docker
+## Installation
 
 You need Docker 1.12 or higher, get the latest stable official release for your platform.
 
@@ -91,13 +27,6 @@ You need Docker 1.12 or higher, get the latest stable official release for your 
 
     ```bash
     git clone https://github.com/GeoNode/geonode-project.git -b <your_branch>
-    source /usr/share/virtualenvwrapper/virtualenvwrapper.sh
-    mkvirtualenv --python=/usr/bin/python3 undp_bougainville
-    pip install Django==2.2.15
-
-    django-admin startproject --template=./geonode-project -e py,sh,md,rst,json,yml,ini,env,sample,properties -n monitoring-cron -n Dockerfile undp_bougainville
-
-    cd undp_bougainville
     ```
 
 2. Run `docker-compose` to start it up (get a cup of coffee or tea while you wait)
@@ -134,6 +63,34 @@ You need Docker 1.12 or higher, get the latest stable official release for your 
 ```bash
 vim .env
   --> replace localhost with 123.456.789.111 everywhere
+```
+
+### Setting up a mail-server
+
+The docker-compose production override file (docker-compose.prod.yml) includes a mailserver to make inviting users possible.
+Setting this up takes a bit of work. The basic process is outlined on in the [documentation for mailserver](https://docker-mailserver.github.io/docker-mailserver/edge/examples/tutorials/basic-installation/).
+
+The steps are as follows:
+
+1. Create containers\volumes with `docker-compose -f docker-compose.yml -f docker-compose.prod.yml build mailserver`
+2. Setup at least one account on the mailserver `docker run --rm -v "/mnt/efs/fs1/dms/config:/tmp/docker-mailserver/" docker.io/mailserver/docker-mailserver setup email add <user>@bougainville-nr.org <user_password>`
+3. Setup [DKIM](https://docker-mailserver.github.io/docker-mailserver/edge/config/best-practices/dkim/) keys `docker run --rm -v "/mnt/efs/fs1/dms/config:/tmp/docker-mailserver/" docker.io/mailserver/docker-mailserver setup config dkim keysize 2048`
+4. Configure DNS as follows:
+   1. Add host=`mail` subdomain
+   2. Add [SPF](https://docker-mailserver.github.io/docker-mailserver/edge/config/best-practices/spf/) record host=@ value=`v=spf1 mx ~all`
+   3. Add [DMARC](https://docker-mailserver.github.io/docker-mailserver/edge/config/best-practices/dmarc/) record host=`_dmarc` value=`v=DMARC1; p=none; rua=mailto:<user>@bougainville-nr.org; ruf=mailto:<user>@bougainville-nr.org; sp=quarantine; ri=86400`
+   4. Add [DKIM](https://docker-mailserver.github.io/docker-mailserver/edge/config/best-practices/dkim/) record host=`mail._domainkey`  `v=DKIM1; h=sha256; k=rsa; p=<get key from /mnt/efs/fs1/dms/config/opendkim/keys/bougainville-nr.org/mail.txt>`
+   5. Add MX record host=@ value=`mail.bougainville-nr.org`
+5. Edit Environment file as follows
+```dotenv
+EMAIL_ENABLE=True
+...
+DJANGO_EMAIL_HOST=mail
+DJANGO_EMAIL_PORT=25
+DJANGO_EMAIL_HOST_USER=<user>@<yourdomain>
+DJANGO_EMAIL_HOST_PASSWORD=<password>
+DJANGO_EMAIL_USE_TLS=True
+DJANGO_EMAIL_USE_SSL=False
 ```
 
 ### Startup the image
@@ -204,6 +161,9 @@ e.g.:
 
 ```bash
 docker exec -it django4undp_bougainville sh -c 'SOURCE_URL=$SOURCE_URL TARGET_URL=$TARGET_URL ./undp_bougainville/br/restore.sh $BKP_FOLDER_NAME'
+# if restoring has failed 
+docker exec -it db4undp_bougainville sh -c 'psql -f /$BKP_FOLDER_NAME/undp_bougainville/br/fix_backup.sql'
+docker exec -it db4undp_bougainville sh -c 'psql -f /$BKP_FOLDER_NAME/undp_bougainville/br/postfix_geoapps_backup.sql'
 ```
 
 ## Recommended: Track your changes
@@ -272,40 +232,14 @@ Create a hooks.json file.
 ```
 
 Copy Letsencrpyt certs and run 
+```bash
 docker cp -L undp_bougainville_letsencrypt_1:/geonode-certificates/production/live/<machine>/fullchain.pem ~/fullchain.pem
 docker cp -L undp_bougainville_letsencrypt_1:/geonode-certificates/production/live/<machine>/privkey.pem ~/privkey.pem
+```
 
 `pm2 start ecosystem.config.js`
 
 Visit [Gitlab](https://gitlab.com/mammoth-geospatial/undp/undp_bougainville/-/hooks) setup hook to run on merge-requests and pushs.
-
-## Setting up a mail-server
-
-The docker-compose production override file (docker-compose.prod.yml) includes a mailserver to make inviting users possible.
-Setting this up takes a bit of work. The basic process is outlined on in the [documentation for mailserver](https://docker-mailserver.github.io/docker-mailserver/edge/examples/tutorials/basic-installation/).
-
-The steps are as follows:
-
-1. Create containers\volumes with `docker-compose -f docker-compose.yml -f docker-compose.prod.yml build mailserver`
-2. Setup at least one account on the mailserver `docker run --rm -v "/mnt/efs/fs1/dms/config:/tmp/docker-mailserver/" docker.io/mailserver/docker-mailserver setup email add <user>@bougainville-nr.org <user_password>`
-3. Setup [DKIM](https://docker-mailserver.github.io/docker-mailserver/edge/config/best-practices/dkim/) keys `docker run --rm -v "/mnt/efs/fs1/dms/config:/tmp/docker-mailserver/" docker.io/mailserver/docker-mailserver setup config dkim keysize 2048`
-4. Configure DNS as follows:
-   1. Add host=`mail` subdomain
-   2. Add [SPF](https://docker-mailserver.github.io/docker-mailserver/edge/config/best-practices/spf/) record host=@ value=`v=spf1 mx ~all`
-   3. Add [DMARC](https://docker-mailserver.github.io/docker-mailserver/edge/config/best-practices/dmarc/) record host=`_dmarc` value=`v=DMARC1; p=none; rua=mailto:<user>@bougainville-nr.org; ruf=mailto:<user>@bougainville-nr.org; sp=quarantine; ri=86400`
-   4. Add [DKIM](https://docker-mailserver.github.io/docker-mailserver/edge/config/best-practices/dkim/) record host=`mail._domainkey`  `v=DKIM1; h=sha256; k=rsa; p=<get key from /mnt/efs/fs1/dms/config/opendkim/keys/bougainville-nr.org/mail.txt>`
-   5. Add MX record host=@ value=`mail.bougainville-nr.org`
-5. Edit Environment file as follows
-```dotenv
-EMAIL_ENABLE=True
-...
-DJANGO_EMAIL_HOST=mail
-DJANGO_EMAIL_PORT=25
-DJANGO_EMAIL_HOST_USER=<user>@bougainville-nr.org
-DJANGO_EMAIL_HOST_PASSWORD=<password>
-DJANGO_EMAIL_USE_TLS=True
-DJANGO_EMAIL_USE_SSL=False
-```
 
 ## Project Customisations
 
@@ -321,8 +255,9 @@ THUMBNAIL_GENERATOR_DEFAULT_SIZE = {"width": 420, "height": 350}
 ```
 We have made four changes from the default geonode project, these changes may require reversing or updating to ensure 
 future compatibility.
-First we required a new endpoint `base/<resource_id>/thumbnail_upload_large/` which overrides the previous `base/<resource_id>/thumbnail_upload/` endpoint.
-Secondly a number of templates referring the old url have been updated.
-Third we have added a new field to the ResourceBase model and a new model CuratedThumbnailLarge for our new thumbnails.
-Finally we have patched the format_objects method in the API models to use this new model.
+
+- First we required a new endpoint `base/<resource_id>/thumbnail_upload_large/` which overrides the previous `base/<resource_id>/thumbnail_upload/` endpoint.
+- Secondly a number of templates referring the old url have been updated.
+- Third we have added a new field to the ResourceBase model and a new model CuratedThumbnailLarge for our new thumbnails.
+- Finally we have patched the format_objects method in the API models to use this new model.
 
