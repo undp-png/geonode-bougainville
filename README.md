@@ -1,4 +1,4 @@
-# Bougainville Natural Resources Hub
+# Bougainville Natural Resources Portal
 
 A customised Geonode for creating an open-access online web portal to support mapping and monitoring of the environment and sustainable use of natural resources in Bougainville.
 
@@ -7,6 +7,7 @@ A customised Geonode for creating an open-access online web portal to support ma
 
 ## Table of Contents
 
+- [Audience](#audience)
 - [Installation](#installation)
 - [Run the instance in development mode](#run-the-instance-in-development-mode)
 - [Run the instance on a public site](#run-the-instance-on-a-public-site)
@@ -18,6 +19,13 @@ A customised Geonode for creating an open-access online web portal to support ma
 - [Mail Server Setup](#setting-up-a-mail-server)
 - [Custom Changes: Differences From Default Geonode](#project-customisations)
 
+## Audience
+
+This repository is aimed at technical users who want to build an instance of a GeoNode-based web portal using this project as a starting point. This might be useful when you want to create a development instance of this particular portal, or if you want to build a similar project by copying this one and modifying it.
+
+To do this, you will need to understand how to use Git/GitHub to create a "fork" or "clone" of the project, be able to deploy a Dockerised application on a Linux machine, and have some understanding of how to modify the code to develop and customise your instance. There are detailed instructions below.
+
+Creating a copy of this repository only gives you the means to replicate the application. The data (maps and layers, user accounts, geostories etc) are hosted in a database. If you're creating your own instance, you would probably want to produce your own data anyway! But if you're trying to launch another instance with the same data, you will need to migrate it from the host database into your new instance.
 
 ## Installation
 
@@ -161,7 +169,7 @@ e.g.:
 
 ```bash
 docker exec -it django4undp_bougainville sh -c 'SOURCE_URL=$SOURCE_URL TARGET_URL=$TARGET_URL ./undp_bougainville/br/restore.sh $BKP_FOLDER_NAME'
-# if restoring has failed 
+# if restoring has failed
 docker exec -it db4undp_bougainville sh -c 'psql -f /$BKP_FOLDER_NAME/undp_bougainville/br/fix_backup.sql'
 docker exec -it db4undp_bougainville sh -c 'psql -f /$BKP_FOLDER_NAME/undp_bougainville/br/postfix_geoapps_backup.sql'
 ```
@@ -196,7 +204,7 @@ Install node, pm2 and webhooks. PM2 runs our webhooks.
 ```sh
 sudo apt-get install webhook
 sudo apt-get install -y nodejs
-sudo npm install pm2 -g 
+sudo npm install pm2 -g
 ```
 Create a hooks.json file.
 
@@ -231,7 +239,7 @@ Create a hooks.json file.
 ]
 ```
 
-Copy Letsencrpyt certs and run 
+Copy Letsencrpyt certs and run
 ```bash
 docker cp -L undp_bougainville_letsencrypt_1:/geonode-certificates/production/live/<machine>/fullchain.pem ~/fullchain.pem
 docker cp -L undp_bougainville_letsencrypt_1:/geonode-certificates/production/live/<machine>/privkey.pem ~/privkey.pem
@@ -245,7 +253,7 @@ Visit [Gitlab](https://gitlab.com/mammoth-geospatial/undp/undp_bougainville/-/ho
 
 ### Higher Resolution Thumbnails
 The core Geonode project sets thumbnail resolution at 240x180, this leads to fairly fuzzy images on the homepage and lists.
-We have changed the behaviour to extract the size of the resolution directly from the `THUMBNAIL_GENERATOR_DEFAULT_SIZE` 
+We have changed the behaviour to extract the size of the resolution directly from the `THUMBNAIL_GENERATOR_DEFAULT_SIZE`
 in the `settings.py` file. For example default used in our project is.
 
 ```python
@@ -253,11 +261,10 @@ in the `settings.py` file. For example default used in our project is.
 THUMBNAIL_GENERATOR_DEFAULT_SIZE = {"width": 420, "height": 350}
 ...
 ```
-We have made four changes from the default geonode project, these changes may require reversing or updating to ensure 
+We have made four changes from the default geonode project, these changes may require reversing or updating to ensure
 future compatibility.
 
 - First we required a new endpoint `base/<resource_id>/thumbnail_upload_large/` which overrides the previous `base/<resource_id>/thumbnail_upload/` endpoint.
 - Secondly a number of templates referring the old url have been updated.
 - Third we have added a new field to the ResourceBase model and a new model CuratedThumbnailLarge for our new thumbnails.
 - Finally we have patched the format_objects method in the API models to use this new model.
-
