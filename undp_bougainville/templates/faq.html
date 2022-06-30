@@ -12,25 +12,34 @@
   <h1>{% trans "FAQ Page" %}</h1>
 </div>
   
- <h2>What is the Natural Resource Hub for Bougainville for? </h2>
+ <h2>What is the Bougainville Natural Resource Portal for? </h2>
  <p>
-    This Hub has been designed to provide, upload, and share geospatial data regarding natural resource management in the Autonomous Region of Bougainville. This includes data on coral reefs, mangroves, forests, and other critical ecosystems. Users can interact with maps and data regarding their work or residential area. 
+    This Portal has been designed to provide, upload, and share geospatial data regarding natural resource management in the Autonomous Region of Bougainville. This includes global data on coral reefs, mangroves, forests, and other critical ecosystems. Users can interact with maps and data regarding their work or residential area,, and also upload or create their own datasets for comparison against global level data. The Portal is open source and open access, and built on the Geonode infrastructure (<a href="https://geonode.org/" target="_blank">www.geonode.org</a>)
  </p>
 
- <h2>Why isn’t this Hub for all of Papua New Guinea? </h2>
+ <h2> Who is the custodian of the Bougainville Natural Resource Portal?</h2>
  <p>
-    This hub is a provincial prototype for a national level implementation of the Natural Resource Hub for Papua New Guinea. The lessons learned will be integrated into the national Hub in 2022. 
+  Currently the custodian of the Portal, and all products under the Natural Resource Management Hub, is the United Nations Development Programme (UNDP) in Papua New Guinea. All data is serviced through cloud computing services provided by UN International Computing Center (UN ICC) and Amazon Web Services. This ensures fast data transfers and constant availability. 
+ </p>
 
+ <h2>Why isn't this Portal for all of Papua New Guinea? </h2>
+ <p>
+  This hub is a provincial prototype for a national level implementation of the <a href="https://www.png-nrmhub.org" target="_blank">Natural Resource Management Hub for Papua New Guinea</a>. This Portal has been scaled up to address concerns across Papua New Guinea in the Biodiversity and Climate Geoportal: <a href="https://www.png-nrmhub.org" target="_blank">www.png-geoportal</a>.
  </p>
 
  <h2>Is all of the data public?</h2>
  <p>
-    At the time of writing, all data in the Natural Resource Hub is from globally available, open datasets. These have been clipped and made more accessible for use by stakeholders in Bougainville. Whilst these datasets are public, data can be uploaded which is for certain users or private.  
+    At the time of writing, all data in the Natural Resource Portal is from globally available, open datasets. These have been clipped and made more accessible for use by stakeholders in Bougainville. Whilst these datasets are public, data can be uploaded which is for certain users or private.  
  </p>
 
- <h2>How can I learn more about how to use the Hub? </h2>
+ <h2>How can I learn more about how to use the Portal? </h2>
  <p>
-    We are developing training materials which will be available on this site in early 2022. 
+  Training materials are available on <a href="/training">this page</a>
+ </p>
+
+ <h2>How can I make a user account?</h2>
+ <p>
+  Click on the “Register” button. Once you have filled in your request, an administrator will review your account creation request. If approved, you will receive an email with your username and password shortly afterwards. 
  </p>
 
  <h2>Why do I need a user account?</h2>
@@ -38,10 +47,35 @@
     Registering for a user account gives can unlock more functionalities such as uploading data, editing data, styling data, adding metadata, and joining a “user group. User groups may have special privileges or share private data to certain members. 
  </p>
 
- <h2>How can I make a user account?</h2>
+ <h2>Why would I need a group?</h2>
  <p>
-    To register for the Hub, please email im.png@undp.org.  
+  User groups are useful for organizations or departments who have a significant use case for sharing data amongst themselves. Data and maps uploaded or created in the Portal can be altered so they are only shared amongst members of a certain group. To request creating a group, email the site administrator at <a href="mailto:png.im@undp.org">png.im@undp.org</a> explaining your use case and level of access required. Access to groups is as follows: 
+    <ul>
+      <li>
+        Public
+        <ul>
+          <li>visible to all registered users</li>
+          <li>registered users can join or invite other users to the group</li>
+          <li>useful for content curation and monitoring updates to speciﬁc content</li>
+        </ul>
+      </li>
+      <li>
+        Public (Invite-Only)
+        <ul>
+          <li>visible to all registered users</li>
+          <li>registered users cannot join the group without being explicitly invited by a group manager</li>
+        </ul>
+      </li>
+      <li>
+        Private
+        <ul>
+          <li>hidden from view unless a registered user account has been explicitly invited to the group</li>
+          <li>These groups are useful for managing access control for sensitive content or data, or for restricting certain actions such as content editing permissions to selected users</li>
+        </ul>
+      </li>
+    </ul>
  </p>
+ 
  
 
 {% endblock %}

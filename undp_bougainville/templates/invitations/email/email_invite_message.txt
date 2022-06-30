@@ -2,12 +2,12 @@
 {% autoescape off %}
 {% blocktrans %}Welcome!,{% endblocktrans %}
 
-{{ inviter_name }} is inviting you to join the Bougainville Natural Resource Hub({{ site_name|urlencode }}).
+{{ inviter_name }} is inviting you to join the Bougainville Natural Resource Portal({{ site_name|urlencode }}).
 
 Please register at {{ invite_url }} .
 
 {% blocktrans %}Regards,{% endblocktrans %}
 
-{% blocktrans %}Bougainville Natural Resource Hub{% endblocktrans %}
+Bougainville Natural Resource Portal
 
 {% endautoescape %}

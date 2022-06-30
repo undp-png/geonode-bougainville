@@ -182,7 +182,13 @@ AUTH_EXEMPT_URLS += ('/maps/*',
                      '/documents/*',
                      '/search/*',
                      '/account/*',
-                     '/api/*')
+                     '/api/*',
+                     '/base/autocomplete_hierachical_keyword/*',
+                     '/base/autocomplete_region/*',
+                     '/base/autocomplete_response/*',
+                     '/base/groups/autocomplete/*',
+                     '/base/people/autocomplete/*'
+                     )
 
 # thumbnail settings
 THUMBNAIL_GENERATOR_DEFAULT_SIZE = {"width": 420, "height": 350}
@@ -209,3 +215,126 @@ UI_DEFAULT_MANDATORY_FIELDS = [
     'category_form',
     'id_resource-attribution',
 ]
+
+if MAPBOX_ACCESS_TOKEN:
+    DEFAULT_MS2_BACKGROUNDS = [
+            {
+                "type": "tileprovider",
+                "title": "MapBox streets",
+                "provider": "custom",
+                "name": "MapBox streets",
+                "source": "streets-v11",
+                "url": f"https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{{z}}/{{x}}/{{y}}?access_token={MAPBOX_ACCESS_TOKEN}",
+                "thumbURL": f"https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/256/6/33/23?access_token={MAPBOX_ACCESS_TOKEN}",  # noqa
+                "group": "background",
+                "visibility": True,
+                "options": {
+                "attribution": 'Imagery from <a href="http://mapbox.com/about/maps/">MapBox</a>',
+                "subdomains": ['a', 'b', 'c', 'd']
+                }
+            },
+        {
+            "type": "tileprovider",
+            "title": "MapBox Outdoors",
+            "provider": "custom",
+            "name": "MapBox outdoors",
+            "source": "outdoors-v11",
+            "url": f"https://api.mapbox.com/styles/v1/mapbox/outdoors-v11/tiles/{{z}}/{{x}}/{{y}}?access_token={MAPBOX_ACCESS_TOKEN}",
+            "thumbURL": f"https://api.mapbox.com/styles/v1/mapbox/outdoors-v11/tiles/256/6/33/23?access_token={MAPBOX_ACCESS_TOKEN}",
+            # noqa
+            "group": "background",
+            "visibility": False,
+            "options": {
+                "attribution": 'Imagery from <a href="http://mapbox.com/about/maps/">MapBox</a>',
+                "subdomains": ['a', 'b', 'c', 'd']
+            }
+        },
+        {
+            "type": "tileprovider",
+            "title": "MapBox Dark",
+            "provider": "custom",
+            "name": "MapBox dark",
+            "source": "dark-v10",
+            "url": f"https://api.mapbox.com/styles/v1/mapbox/dark-v10/tiles/{{z}}/{{x}}/{{y}}?access_token={MAPBOX_ACCESS_TOKEN}",
+            "thumbURL": f"https://api.mapbox.com/styles/v1/mapbox/dark-v10/tiles/256/6/33/23?access_token={MAPBOX_ACCESS_TOKEN}",
+            # noqa
+            "group": "background",
+            "visibility": False,
+            "options": {
+                "attribution": 'Imagery from <a href="http://mapbox.com/about/maps/">MapBox</a>',
+                "subdomains": ['a', 'b', 'c', 'd']
+            }
+        },
+        {
+            "type": "tileprovider",
+            "title": "MapBox Satellite",
+            "provider": "custom",
+            "name": "MapBox satellite",
+            "source": "satellite-v9",
+            "url": f"https://api.mapbox.com/styles/v1/mapbox/satellite-v9/tiles/{{z}}/{{x}}/{{y}}?access_token={MAPBOX_ACCESS_TOKEN}",
+            "thumbURL": f"https://api.mapbox.com/styles/v1/mapbox/satellite-v9/tiles/256/6/33/23?access_token={MAPBOX_ACCESS_TOKEN}",
+            # noqa
+            "group": "background",
+            "visibility": False,
+            "options": {
+                "attribution": 'Imagery from <a href="http://mapbox.com/about/maps/">MapBox</a>',
+                "subdomains": ['a', 'b', 'c', 'd']
+            }
+        },
+        {
+            "type": "tileprovider",
+            "title": "MapBox Light",
+            "provider": "custom",
+            "name": "MapBox light",
+            "source": "light-v10",
+            "url": f"https://api.mapbox.com/styles/v1/mapbox/light-v10/tiles/{{z}}/{{x}}/{{y}}?access_token={MAPBOX_ACCESS_TOKEN}",
+            "thumbURL": f"https://api.mapbox.com/styles/v1/mapbox/light-v10/tiles/256/6/33/23?access_token={MAPBOX_ACCESS_TOKEN}",
+            # noqa
+            "group": "background",
+            "visibility": False,
+            "options": {
+                "attribution": 'Imagery from <a href="http://mapbox.com/about/maps/">MapBox</a>',
+                "subdomains": ['a', 'b', 'c', 'd']
+            }
+        },
+            {
+                "type": "osm",
+                "title": "Open Street Map",
+                "name": "mapnik",
+                "source": "osm",
+                "group": "background",
+                "visibility": False
+            }, {
+                "type": "tileprovider",
+                "title": "OpenTopoMap",
+                "provider": "OpenTopoMap",
+                "name": "OpenTopoMap",
+                "source": "OpenTopoMap",
+                "group": "background",
+                "visibility": False
+            }, {
+                "type": "wms",
+                "title": "Sentinel-2 cloudless - https://s2maps.eu",
+                "format": "image/jpeg",
+                "id": "s2cloudless",
+                "name": "s2cloudless:s2cloudless",
+                "url": "https://maps.geo-solutions.it/geoserver/wms",
+                "group": "background",
+                "thumbURL": f"{SITEURL}static/mapstorestyle/img/s2cloudless-s2cloudless.png",
+                "visibility": False
+            }, {
+                "source": "ol",
+                "group": "background",
+                "id": "none",
+                "name": "empty",
+                "title": "Empty Background",
+                "type": "empty",
+                "visibility": False,
+                "args": ["Empty Background", {"visibility": False}]
+            }
+        ]
+
+    MAPSTORE_BASELAYERS = DEFAULT_MS2_BACKGROUNDS
+
+# disable avatar caching, to allow memcached to run
+AVATAR_CACHE_ENABLED = False

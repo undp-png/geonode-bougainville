@@ -24,7 +24,7 @@ from django.views.generic import TemplateView
 from geonode.urls import urlpatterns
 from geonode.base import register_url_event
 
-from undp_bougainville.views import thumbnail_upload
+from undp_bougainville.views import thumbnail_upload, proxy
 
 urlpatterns += [
 ## include your urls here
@@ -47,3 +47,7 @@ urlpatterns = [
         homepage,
         name='home'),
  ] + urlpatterns
+
+# drop proxy from url patterns replace with our own proxy view
+urlpatterns = [_ for _ in urlpatterns if not hasattr(_, 'name') or ( hasattr(_, 'name') and _.name != "proxy")] + [
+    url(r'^proxy/', proxy, name='proxy'), ]

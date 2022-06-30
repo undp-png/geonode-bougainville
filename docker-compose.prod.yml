@@ -12,8 +12,8 @@ services:
       - "465:465"
     volumes:
       - /mnt/efs/fs1/dms/mail-data/:/var/mail/
-      - /mnt/efs/fs1/dms/mail-state/:/var/mail-state/
-      - /mnt/efs/fs1/dms/mail-logs/:/var/log/mail/
+      #- /mnt/efs/fs1/dms/mail-state/:/var/mail-state/
+      #- /mnt/efs/fs1/dms/mail-logs/:/var/log/mail/
       - /mnt/efs/fs1/dms/config/:/tmp/docker-mailserver/
       # The "from" path will vary based on where your certs are locally:
       - nginx-certificates:/etc-letsencrypt/
@@ -27,16 +27,16 @@ services:
       - SSL_KEY_PATH=/etc-letsencrypt/production/live/bougainville-nr.org/privkey.pem
       # Allow sending emails from other docker containers
       # Beware creating an Open Relay: https://docker-mailserver.github.io/docker-mailserver/edge/config/environment/#permit_docker
-      - PERMIT_DOCKER=network
+      - PERMIT_DOCKER=connected-networks
       # All env below are default settings:
       - DMS_DEBUG=0
       - ONE_DIR=1
-      - ENABLE_POSTGREY=0
-      - ENABLE_CLAMAV=0
-      - ENABLE_SPAMASSASSIN=0
+      - ENABLE_POSTGREY=1
+      - ENABLE_CLAMAV=1
+      - ENABLE_SPAMASSASSIN=1
       # You may want to enable this: https://docker-mailserver.github.io/docker-mailserver/edge/config/environment/#spoof_protection
       # See step 8 below, which demonstrates setup with enabled/disabled SPOOF_PROTECTION:
-      - SPOOF_PROTECTION=0
+      - SPOOF_PROTECTION=1
     restart: always
     stop_grace_period: 1m
     cap_add:
@@ -44,7 +44,8 @@ services:
       - SYS_PTRACE
   db:
     volumes:
-      - '/mnt/efs/fs1/dbdata:/var/lib/postgresql/data'
+      # Removing database from EFS.
+      # - '/mnt/efs/fs1/dbdata:/var/lib/postgresql/data'
       - '/mnt/efs/fs1/dbbackups:/pg_backups'
   django:
     build: .

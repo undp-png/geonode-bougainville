@@ -3,15 +3,17 @@
 {% load i18n %}
 {% load base_tags %}
 {% load static %}
+{% load undp_extras %}
 
 
-{% block title %} Bougainville Natural Resource Hub {% endblock %}
+
+{% block title %} Bougainville Natural Resource Portal {% endblock %}
 
 
 {% block hero %}
   <div class="jumbotron">
     <div class="inner-jumbotron">
-      <p class="main-title">Bougainville Natural Resource Hub</p>
+      <p class="main-title">Bougainville Natural Resource Portal</p>
       <p class="subtitle">Connecting you to environmental maps and data</p>
     </div>
   </div>
@@ -21,7 +23,7 @@
 
 <section id="about">
   <div class="container text-center">
-    <h1>Welcome to the Bougainville Natural Resource Hub</h1>
+    <h1>Welcome to the Bougainville Natural Resource Portal</h1>
     <p class="about-intro-text">
       This user-friendly, participatory, and open-access online web portal has been curated and developed by UNDP to support mapping and monitoring the environment and sustainable use of natural resources.
     </p>
@@ -29,7 +31,7 @@
     <p>
       This includes global datasets on coral reefs, mangroves, forests, and other critical ecosystems, along with
       datasets which can assist in planning such as administrative boundaries and village locations. You can upload,
-      view, make and share data from many different levels (local to global) using the functionalities of the Hub.
+      view, make and share data from many different levels (local to global) using the functionalities of the Portal.
     </p>
   </div>
 </section>
@@ -93,7 +95,7 @@
 
   <section id="services">
     <div class="container">
-      <h2>Data and Services available on the Hub</h2>
+      <h2>Data and Services available on the Portal</h2>
       <div class="services-wrapper">
         <div>
           <h4>Interactive data catalogue</h4>
@@ -109,7 +111,7 @@
         </div>
         <div>
           <h4>Reporting</h4>
-          <p>Users can create customized maps from layers from within the Hub which can be download and integrated directly into reports</p>
+          <p>Users can create customized maps from layers from within the Portal which can be downloaded and integrated directly into reports</p>
         </div>
         <div>
           <h4>Interactive data products</h4>
@@ -121,14 +123,14 @@
 
   {% block datasets %}
     <section id="datasets">
-      {% get_visibile_resources request.user %}
+      {% get_visibile_resources_custom request.user %}
     </section>
   {% endblock datasets %}
 
   {% block bigsearch %}
     <div class="big-search">
       <div class="container">
-        <h3 style="text-align: center;">{% trans "Search the Hub" %}</h3>
+        <h3 style="text-align: center;">Search the Portal</h3>
         <div class="search">
           <form id="main_search" action="{% url "search" %}">
             <span class="fa fa-search fa-3x" style="font-size: 2em;"></span>

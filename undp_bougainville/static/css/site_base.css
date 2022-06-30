@@ -107,6 +107,13 @@ button {
   font-weight: 500;
   font-size: 0.875rem;
 }
+.navbar-nav .search input {
+  border-radius: 0;
+  width: 200px;
+}
+.navbar-nav .search input:focus {
+  width: 200px;
+}
 footer {
   background: #01364F;
   color: #ffffff;
@@ -164,6 +171,7 @@ footer .list-unstyled {
   line-height: 4.25rem;
   max-width: 1600px;
   margin: 0 auto;
+  padding-bottom: 60px;
 }
 .home .jumbotron .subtitle {
   text-align: center;
@@ -432,7 +440,7 @@ footer .list-unstyled {
 }
 .about .about-header .inner-header .main-title {
   text-align: center;
-  font-size: 4.5vw;
+  font-size: 4vw;
   font-weight: 700;
   text-transform: uppercase;
   font-family: 'Roboto Condensed', Roboto, sans-serif;
@@ -444,7 +452,7 @@ footer .list-unstyled {
 }
 .about .about-header .inner-header .subtitle {
   text-align: center;
-  font-size: 2rem;
+  font-size: 1.75rem;
   font-weight: 500;
   letter-spacing: 2px;
   line-height: 2.75rem;
@@ -548,6 +556,24 @@ footer .list-unstyled {
 .about .questions-block a {
   color: #EDA93F;
 }
+.training .container a {
+  text-decoration: underline;
+}
+.training h2 {
+  color: #118376;
+}
+.training .training-block {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 20px;
+}
+.training .training-block img {
+  width: 100%;
+  max-width: 200px;
+}
+.msgapi #mapstore-print-panel.modal-dialog {
+  height: auto;
+}
 @media (min-width: 1450px) {
   .container {
     width: 1200px;
@@ -575,6 +601,9 @@ footer .list-unstyled {
   .navbar-collapse.collapse {
     display: none !important;
     padding-bottom: 20px;
+  }
+  .training .training-block {
+    display: block;
   }
 }
 @media (max-width: 990px) {
@@ -621,5 +650,8 @@ footer .list-unstyled {
   .about .text-grid .grid {
     grid-template-columns: 1fr;
     gap: 10px;
+  }
+  .training .training-block {
+    display: block;
   }
 }
